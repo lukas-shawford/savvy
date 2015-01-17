@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using savvy.Data.Entities;
+using savvy.Data.Entities.Questions;
 
 namespace savvy.Data
 {
@@ -16,6 +17,12 @@ namespace savvy.Data
         bool UpdateQuiz(Quiz quiz);
 
         bool DeleteQuiz(int quizId);
+
+        #endregion
+
+        #region Questions
+
+        Question GetQuestion(int questionId);
 
         #endregion
     }

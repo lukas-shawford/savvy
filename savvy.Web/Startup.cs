@@ -20,13 +20,18 @@ namespace savvy.Web
 
             // Web API configuration and services
 
-            // Web API routes
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
                 name: "Quizzes",
                 routeTemplate: "api/quizzes/{id}",
                 defaults: new { controller = "Quiz", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "Questions",
+                routeTemplate: "api/quizzes/{quizId}/questions/{questionId}",
+                defaults: new { controller = "Question", questionId = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(
