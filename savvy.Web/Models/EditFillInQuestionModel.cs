@@ -1,6 +1,6 @@
 ﻿namespace savvy.Web.Models
 {
-    public class FillInQuestionModel : QuestionModel
+    public class EditFillInQuestionModel : EditQuestionModel
     {
         public string Answer { get; set; }
     }

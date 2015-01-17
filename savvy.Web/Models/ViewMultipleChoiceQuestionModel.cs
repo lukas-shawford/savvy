@@ -2,9 +2,8 @@
 
 namespace savvy.Web.Models
 {
-    public class MultipleChoiceQuestionModel : QuestionModel
+    public class ViewMultipleChoiceQuestionModel : ViewQuestionModel
     {
         public virtual List<ChoiceModel> Choices { get; set; }
-        public short CorrectAnswerIndex { get; set; }
     }
 }

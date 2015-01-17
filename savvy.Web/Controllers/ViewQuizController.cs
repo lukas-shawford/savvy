@@ -6,15 +6,15 @@ using savvy.Web.Models;
 
 namespace savvy.Web.Controllers
 {
-    public class EditQuizController : BaseController
+    public class ViewQuizController : BaseController
     {
-        public EditQuizController(ISavvyRepository repo) : base(repo)
+        public ViewQuizController(ISavvyRepository repo) : base(repo)
         {
         }
 
-        public List<EditQuizModel> Get()
+        public List<ViewQuizModel> Get()
         {
-            return Repository.GetAllQuizzes().Select(quiz => ModelFactory.Edit.Create(quiz)).ToList();
+            return Repository.GetAllQuizzes().Select(quiz => ModelFactory.View.Create(quiz)).ToList();
         }
 
         public IHttpActionResult Get(int id)
@@ -26,7 +26,7 @@ namespace savvy.Web.Controllers
                 return NotFound();
             }
 
-            return Ok(ModelFactory.Edit.Create(quiz));
+            return Ok(ModelFactory.View.Create(quiz));
         }
     }
 }

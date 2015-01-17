@@ -4,9 +4,9 @@ using savvy.Data;
 
 namespace savvy.Web.Controllers
 {
-    public class EditQuestionController : BaseController
+    public class ViewQuestionController : BaseController
     {
-        public EditQuestionController(ISavvyRepository repo) : base(repo)
+        public ViewQuestionController(ISavvyRepository repo) : base(repo)
         {
         }
 
@@ -19,7 +19,7 @@ namespace savvy.Web.Controllers
                 return NotFound();
             }
 
-            return Ok(quiz.Questions.Select(question => ModelFactory.Edit.Create(question)));
+            return Ok(quiz.Questions.Select(question => ModelFactory.View.Create(question)));
         }
 
         public IHttpActionResult Get(int quizId, int questionId)
@@ -31,7 +31,7 @@ namespace savvy.Web.Controllers
                 return NotFound();
             }
 
-            return Ok(ModelFactory.Edit.Create(question));
+            return Ok(ModelFactory.View.Create(question));
         }
     }
 }

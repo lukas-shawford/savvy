@@ -23,13 +23,25 @@ namespace savvy.Web
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
-                name: "Quizzes",
+                name: "ViewQuiz",
+                routeTemplate: "api/view/quizzes/{id}",
+                defaults: new { controller = "ViewQuiz", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "EditQuiz",
                 routeTemplate: "api/quizzes/{id}",
                 defaults: new { controller = "EditQuiz", id = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(
-                name: "Questions",
+                name: "ViewQuestion",
+                routeTemplate: "api/view/quizzes/{quizId}/questions/{questionId}",
+                defaults: new { controller = "ViewQuestion", questionId = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "EditQuestion",
                 routeTemplate: "api/quizzes/{quizId}/questions/{questionId}",
                 defaults: new { controller = "EditQuestion", questionId = RouteParameter.Optional }
             );
