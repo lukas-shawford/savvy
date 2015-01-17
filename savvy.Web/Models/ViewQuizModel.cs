@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using savvy.Web.Models.Questions;
 
 namespace savvy.Web.Models
 {

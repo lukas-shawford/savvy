@@ -1,6 +1,7 @@
 ﻿using savvy.Data.Entities.Questions;
+using savvy.Web.Models.Questions;
 
-namespace savvy.Web.Models
+namespace savvy.Web.Models.Factories
 {
     public class ModelFactory
     {

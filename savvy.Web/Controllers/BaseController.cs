@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 using savvy.Data;
-using savvy.Web.Models;
+using savvy.Web.Models.Factories;
 
 namespace savvy.Web.Controllers
 {

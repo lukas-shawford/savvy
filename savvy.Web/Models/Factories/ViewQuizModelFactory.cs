@@ -2,8 +2,9 @@
 using System.Linq;
 using savvy.Data.Entities;
 using savvy.Data.Entities.Questions;
+using savvy.Web.Models.Questions;
 
-namespace savvy.Web.Models
+namespace savvy.Web.Models.Factories
 {
     public class ViewQuizModelFactory
     {
@@ -31,11 +32,11 @@ namespace savvy.Web.Models
 
             if (question is FillInQuestion)
             {
-                model = Create((FillInQuestion)question);
+                model = Create((FillInQuestion) question);
             }
             else if (question is MultipleChoiceQuestion)
             {
-                model = Create((MultipleChoiceQuestion)question);
+                model = Create((MultipleChoiceQuestion) question);
             }
             else
             {

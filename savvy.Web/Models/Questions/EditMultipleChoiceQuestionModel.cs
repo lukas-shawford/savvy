@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace savvy.Web.Models
+namespace savvy.Web.Models.Questions
 {
     public class EditMultipleChoiceQuestionModel : EditQuestionModel
     {

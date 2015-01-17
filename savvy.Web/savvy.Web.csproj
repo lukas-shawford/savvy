@@ -204,19 +204,19 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\ChoiceModel.cs" />
-    <Compile Include="Models\ViewQuizModelFactory.cs" />
-    <Compile Include="Models\EditQuizModelFactory.cs" />
+    <Compile Include="Models\Questions\ChoiceModel.cs" />
+    <Compile Include="Models\Factories\ViewQuizModelFactory.cs" />
+    <Compile Include="Models\Factories\EditQuizModelFactory.cs" />
     <Compile Include="Models\ViewQuizModel.cs" />
-    <Compile Include="Models\ViewQuestionModel.cs" />
-    <Compile Include="Models\ViewMultipleChoiceQuestionModel.cs" />
-    <Compile Include="Models\ViewFillInQuestionModel.cs" />
-    <Compile Include="Models\EditFillInQuestionModel.cs" />
+    <Compile Include="Models\Questions\ViewQuestionModel.cs" />
+    <Compile Include="Models\Questions\ViewMultipleChoiceQuestionModel.cs" />
+    <Compile Include="Models\Questions\ViewFillInQuestionModel.cs" />
+    <Compile Include="Models\Questions\EditFillInQuestionModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\ModelFactory.cs" />
-    <Compile Include="Models\EditMultipleChoiceQuestionModel.cs" />
-    <Compile Include="Models\EditQuestionModel.cs" />
+    <Compile Include="Models\Factories\ModelFactory.cs" />
+    <Compile Include="Models\Questions\EditMultipleChoiceQuestionModel.cs" />
+    <Compile Include="Models\Questions\EditQuestionModel.cs" />
     <Compile Include="Models\EditQuizModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
