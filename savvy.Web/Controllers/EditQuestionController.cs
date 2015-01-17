@@ -4,9 +4,9 @@ using savvy.Data;
 
 namespace savvy.Web.Controllers
 {
-    public class QuestionController : BaseController
+    public class EditQuestionController : BaseController
     {
-        public QuestionController(ISavvyRepository repo) : base(repo)
+        public EditQuestionController(ISavvyRepository repo) : base(repo)
         {
         }
 

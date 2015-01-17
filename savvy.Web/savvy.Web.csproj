@@ -196,8 +196,8 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\QuestionController.cs" />
-    <Compile Include="Controllers\QuizController.cs" />
+    <Compile Include="Controllers\EditQuestionController.cs" />
+    <Compile Include="Controllers\EditQuizController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

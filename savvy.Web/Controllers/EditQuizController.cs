@@ -6,9 +6,9 @@ using savvy.Web.Models;
 
 namespace savvy.Web.Controllers
 {
-    public class QuizController : BaseController
+    public class EditQuizController : BaseController
     {
-        public QuizController(ISavvyRepository repo) : base(repo)
+        public EditQuizController(ISavvyRepository repo) : base(repo)
         {
         }
 
