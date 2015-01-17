@@ -61,7 +61,13 @@ namespace savvy.Data
                     new MultipleChoiceQuestion
                     {
                         QuestionHtml = "How many words are in the US constitution? (Pick the closest answer.)",
-                        Choices = new List<string> { "1,000", "5,000", "10,000", "20,000" },
+                        Choices = new List<Choice>
+                        {
+                            new Choice { ChoiceText = "1,000" },
+                            new Choice { ChoiceText = "5,000" },
+                            new Choice { ChoiceText = "10,000" },
+                            new Choice { ChoiceText = "20,000" }
+                        },
                         CorrectAnswerIndex = 1
                     },
                     new FillInQuestion

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataSeeder.cs" />
+    <Compile Include="Entities\Questions\Choice.cs" />
     <Compile Include="Entities\Questions\FillInQuestion.cs" />
     <Compile Include="Entities\Questions\MultipleChoiceQuestion.cs" />
     <Compile Include="Entities\Questions\Question.cs" />

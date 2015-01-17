@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using savvy.Data;
-using savvy.Data.Entities;
+using savvy.Web.Models;
 
 namespace savvy.Web.Controllers
 {
@@ -15,14 +12,21 @@ namespace savvy.Web.Controllers
         {
         }
 
-        public List<Quiz> Get()
+        public List<QuizModel> Get()
         {
-            return Repository.GetAllQuizzes();
+            return Repository.GetAllQuizzes().Select(ModelFactory.Create).ToList();
         }
 
-        public Quiz Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return Repository.GetQuiz(id);
+            var quiz = Repository.GetQuiz(id);
+
+            if (quiz == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(ModelFactory.Create(quiz));
         }
     }
 }

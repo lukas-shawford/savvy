@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using savvy.Data.Entities;
+using savvy.Data.Entities.Questions;
 using savvy.Data.Extensions;
 
 namespace savvy.Data
@@ -17,7 +19,39 @@ namespace savvy.Data
 
         public List<Quiz> GetAllQuizzes()
         {
-            return _ctx.Quizzes.ToList();
+            List<Quiz> quizzes = _ctx.Quizzes.Include(quiz => quiz.Questions).ToList();
+            
+            foreach (var quiz in quizzes)
+            {
+                foreach (var question in quiz.Questions)
+                {
+                    LoadQuestion(question);
+                }
+            }
+
+            return quizzes;
+        }
+
+        /// <summary>
+        /// Fully loads all properties for the given question.
+        /// </summary>
+        /// <param name="question">Partially-loaded question.</param>
+        /// <remarks>
+        /// Entity Framework does not have a good way to eager load navigation properties of derived classes when
+        /// using Table Per Type inheritance. This method is a work around to load any additional properties that
+        /// we may need for all the different kinds of questions (for example, loading all the choices for a
+        /// multiple choice question).
+        /// 
+        /// See:
+        /// https://connect.microsoft.com/VisualStudio/feedback/details/594289/in-entity-framework-there-should-be-a-way-to-eager-load-include-navigation-properties-of-a-derived-class
+        /// </remarks>
+        public void LoadQuestion(Question question)
+        {
+            var mc = question as MultipleChoiceQuestion;
+            if (mc != null && mc.Choices == null)
+            {
+                mc.Choices = _ctx.Choices.Where(c => c.QuestionId == question.QuestionId).ToList();
+            }
         }
 
         public bool CreateQuiz(Quiz quiz)
@@ -28,7 +62,19 @@ namespace savvy.Data
 
         public Quiz GetQuiz(int quizId)
         {
-            return _ctx.Quizzes.FirstOrDefault(q => q.QuizId == quizId);
+            var quiz = _ctx.Quizzes.Include(q => q.Questions).FirstOrDefault(q => q.QuizId == quizId);
+
+            if (quiz == null)
+            {
+                return null;
+            }
+            
+            foreach (var question in quiz.Questions)
+            {
+                LoadQuestion(question);
+            }
+
+            return quiz;
         }
 
         public bool UpdateQuiz(Quiz quiz)

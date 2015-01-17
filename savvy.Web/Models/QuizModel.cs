@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
-using savvy.Data.Entities.Questions;
 
-namespace savvy.Data.Entities
+namespace savvy.Web.Models
 {
-    public class Quiz
+    public class QuizModel
     {
         public int QuizId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public ICollection<Question> Questions { get; set; }
+        public List<QuestionModel> Questions { get; set; }
     }
 }

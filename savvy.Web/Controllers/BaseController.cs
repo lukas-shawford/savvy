@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+﻿using System.Web.Http;
 using savvy.Data;
+using savvy.Web.Models;
 
 namespace savvy.Web.Controllers
 {
     public abstract class BaseController : ApiController
     {
         private ISavvyRepository _repo;
+        private ModelFactory _modelFactory;
 
         protected BaseController(ISavvyRepository repo)
         {
@@ -20,6 +17,11 @@ namespace savvy.Web.Controllers
         protected ISavvyRepository Repository
         {
             get { return _repo; }
+        }
+
+        protected ModelFactory ModelFactory
+        {
+            get { return _modelFactory ?? (_modelFactory = new ModelFactory()); }
         }
     }
 }
