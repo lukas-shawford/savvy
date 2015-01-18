@@ -8,5 +8,10 @@ namespace savvy.Data.Entities.Questions
     {
         public virtual List<Choice> Choices { get; set; }
         public short CorrectAnswerIndex { get; set; }
+
+        public bool IsCorrect(short Submission)
+        {
+            return Submission == CorrectAnswerIndex;
+        }
     }
 }

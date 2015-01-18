@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Web.Http;
+using Microsoft.CSharp.RuntimeBinder;
 using savvy.Data;
+using savvy.Data.Entities.Questions;
 
 namespace savvy.Web.Controllers
 {
@@ -32,6 +34,52 @@ namespace savvy.Web.Controllers
             }
 
             return Ok(ModelFactory.View.Create(question));
+        }
+
+        public IHttpActionResult Post(int quizId, int questionId, [FromBody] dynamic submission)
+        {
+            // Find the question
+            var question = Repository.GetQuestion(questionId);
+            if (question == null || question.QuizId != quizId)
+            {
+                return NotFound();
+            }
+
+            // Perform some basic validation on the submission
+            try
+            {
+                if (submission == null || submission.answer == null)
+                {
+                    return BadRequest("The body should contain an \"answer\" property containing the user's submission.");
+                }
+            }
+            catch (RuntimeBinderException)
+            {
+                return BadRequest("submission should be a JSON object");
+            }
+
+            // Grade fill-in
+            var fillInQuestion = question as FillInQuestion;
+            if (fillInQuestion != null)
+            {
+                return Ok(fillInQuestion.IsCorrect(submission.answer.ToString()));
+            }
+
+            // Grade multiple choice
+            var multipleChoiceQuestion = question as MultipleChoiceQuestion;
+            if (multipleChoiceQuestion != null)
+            {
+                short answer;
+                if (short.TryParse(submission.answer.ToString(), out answer))
+                {
+                    return Ok(multipleChoiceQuestion.IsCorrect(answer));
+                }
+                
+                return BadRequest("The \"answer\" should be a number corresponding to the correct answer index (starting with zero).");
+            }
+
+            // Grading logic not defined
+            return InternalServerError();
         }
     }
 }
