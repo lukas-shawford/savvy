@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Web.Http;
+using JsonPatch;
 using savvy.Data;
+using savvy.Data.Entities.Questions;
 
 namespace savvy.Web.Controllers
 {
@@ -32,6 +35,25 @@ namespace savvy.Web.Controllers
             }
 
             return Ok(ModelFactory.Edit.Create(question));
+        }
+
+        public IHttpActionResult Patch(int quizId, int sequenceNum, JsonPatchDocument<Question> patch)
+        {
+            var question = Repository.GetQuestion(quizId, sequenceNum);
+
+            if (question == null)
+            {
+                return NotFound();
+            }
+
+            patch.ApplyUpdatesTo(question);
+
+            if (Repository.UpdateQuestion(question))
+            {
+                return Ok(ModelFactory.Edit.Create(question));
+            }
+
+            return InternalServerError();
         }
     }
 }

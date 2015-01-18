@@ -26,6 +26,8 @@ namespace savvy.Data
 
         Question GetQuestion(int quizId, int sequenceNum);
 
+        bool UpdateQuestion(Question question);
+
         #endregion
     }
 }
