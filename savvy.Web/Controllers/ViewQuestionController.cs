@@ -24,11 +24,11 @@ namespace savvy.Web.Controllers
             return Ok(quiz.Questions.Select(question => ModelFactory.View.Create(question)));
         }
 
-        public IHttpActionResult Get(int quizId, int questionId)
+        public IHttpActionResult Get(int quizId, int sequenceNum)
         {
-            var question = Repository.GetQuestion(questionId);
+            var question = Repository.GetQuestion(quizId, sequenceNum);
 
-            if (question == null || question.QuizId != quizId)
+            if (question == null)
             {
                 return NotFound();
             }
@@ -36,11 +36,11 @@ namespace savvy.Web.Controllers
             return Ok(ModelFactory.View.Create(question));
         }
 
-        public IHttpActionResult Post(int quizId, int questionId, [FromBody] dynamic submission)
+        public IHttpActionResult Post(int quizId, int sequenceNum, [FromBody] dynamic submission)
         {
             // Find the question
-            var question = Repository.GetQuestion(questionId);
-            if (question == null || question.QuizId != quizId)
+            var question = Repository.GetQuestion(quizId, sequenceNum);
+            if (question == null)
             {
                 return NotFound();
             }

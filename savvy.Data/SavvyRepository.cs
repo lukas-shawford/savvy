@@ -23,6 +23,8 @@ namespace savvy.Data
             
             foreach (var quiz in quizzes)
             {
+                quiz.Questions.Sort((q1, q2) => q1.SequenceNum.CompareTo(q2.SequenceNum));
+
                 foreach (var question in quiz.Questions)
                 {
                     LoadQuestion(question);
@@ -68,6 +70,8 @@ namespace savvy.Data
             {
                 return null;
             }
+
+            quiz.Questions.Sort((q1, q2) => q1.SequenceNum.CompareTo(q2.SequenceNum));
             
             foreach (var question in quiz.Questions)
             {
@@ -80,6 +84,20 @@ namespace savvy.Data
         public Question GetQuestion(int questionId)
         {
             var question = _ctx.Questions.FirstOrDefault(q => q.QuestionId == questionId);
+
+            if (question == null)
+            {
+                return null;
+            }
+
+            LoadQuestion(question);
+
+            return question;
+        }
+
+        public Question GetQuestion(int quizId, int sequenceNum)
+        {
+            var question = _ctx.Questions.FirstOrDefault(q => q.QuizId == quizId && q.SequenceNum == sequenceNum);
 
             if (question == null)
             {

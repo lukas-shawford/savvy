@@ -22,11 +22,11 @@ namespace savvy.Web.Controllers
             return Ok(quiz.Questions.Select(question => ModelFactory.Edit.Create(question)));
         }
 
-        public IHttpActionResult Get(int quizId, int questionId)
+        public IHttpActionResult Get(int quizId, int sequenceNum)
         {
-            var question = Repository.GetQuestion(questionId);
+            var question = Repository.GetQuestion(quizId, sequenceNum);
 
-            if (question == null || question.QuizId != quizId)
+            if (question == null)
             {
                 return NotFound();
             }

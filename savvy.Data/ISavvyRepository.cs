@@ -24,6 +24,8 @@ namespace savvy.Data
 
         Question GetQuestion(int questionId);
 
+        Question GetQuestion(int quizId, int sequenceNum);
+
         #endregion
     }
 }

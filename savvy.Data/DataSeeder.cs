@@ -55,11 +55,13 @@ namespace savvy.Data
                 {
                     new FillInQuestion
                     {
+                        SequenceNum = 1,
                         QuestionHtml = "In what year did the Battle of Hastings take place?",
                         Answer = "1066"
                     },
                     new MultipleChoiceQuestion
                     {
+                        SequenceNum = 2,
                         QuestionHtml = "How many words are in the US constitution? (Pick the closest answer.)",
                         Choices = new List<Choice>
                         {
@@ -72,6 +74,7 @@ namespace savvy.Data
                     },
                     new FillInQuestion
                     {
+                        SequenceNum = 3,
                         QuestionHtml = "What is the default squawk code for VFR aircraft in the United States?",
                         Answer = "1200"
                     }

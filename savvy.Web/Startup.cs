@@ -36,14 +36,14 @@ namespace savvy.Web
 
             config.Routes.MapHttpRoute(
                 name: "ViewQuestion",
-                routeTemplate: "api/view/quizzes/{quizId}/questions/{questionId}",
-                defaults: new { controller = "ViewQuestion", questionId = RouteParameter.Optional }
+                routeTemplate: "api/view/quizzes/{quizId}/questions/{sequenceNum}",
+                defaults: new { controller = "ViewQuestion", sequenceNum = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(
                 name: "EditQuestion",
-                routeTemplate: "api/quizzes/{quizId}/questions/{questionId}",
-                defaults: new { controller = "EditQuestion", questionId = RouteParameter.Optional }
+                routeTemplate: "api/quizzes/{quizId}/questions/{sequenceNum}",
+                defaults: new { controller = "EditQuestion", sequenceNum = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(
