@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Web.Http;
+using JsonPatch.Formatting;
 using Microsoft.Owin;
 using Newtonsoft.Json.Serialization;
 using Ninject;
@@ -52,10 +53,16 @@ namespace savvy.Web
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            // Convert JSON property names to camel case
+            // Temporarily disabling as this doesn't work with JsonPatch:
+            // https://github.com/myquay/JsonPatch/issues/10
+            //config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             app.UseNinjectMiddleware(CreateKernel);
             app.UseNinjectWebApi(config);
+
+            // Add support for JSON-patch
+            config.Formatters.Add(new JsonPatchFormatter());
 
             ConfigureAuth(app);
         }
