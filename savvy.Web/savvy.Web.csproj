@@ -205,9 +205,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Converters\JsonCreationConverter.cs" />
+    <Compile Include="Models\Converters\QuestionConverter.cs" />
     <Compile Include="Models\Questions\ChoiceModel.cs" />
     <Compile Include="Models\Factories\ViewQuizModelFactory.cs" />
     <Compile Include="Models\Factories\EditQuizModelFactory.cs" />
+    <Compile Include="Models\Questions\QuestionType.cs" />
     <Compile Include="Models\ViewQuizModel.cs" />
     <Compile Include="Models\Questions\ViewQuestionModel.cs" />
     <Compile Include="Models\Questions\ViewMultipleChoiceQuestionModel.cs" />

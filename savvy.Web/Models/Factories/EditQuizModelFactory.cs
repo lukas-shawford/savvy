@@ -10,9 +10,9 @@ namespace savvy.Web.Models.Factories
     {
         protected ModelFactory ModelFactory;
 
-        public EditQuizModelFactory(ModelFactory ModelFactory)
+        public EditQuizModelFactory(ModelFactory modelFactory)
         {
-            this.ModelFactory = ModelFactory;
+            ModelFactory = modelFactory;
         }
 
         public EditQuizModel Create(Quiz quiz)
@@ -23,6 +23,17 @@ namespace savvy.Web.Models.Factories
                 Name = quiz.Name,
                 Description = quiz.Description,
                 Questions = quiz.Questions.Select(Create).ToList()
+            };
+        }
+
+        public Quiz Parse(EditQuizModel model)
+        {
+            return new Quiz
+            {
+                QuizId = model.QuizId,
+                Name = model.Name,
+                Description = model.Description,
+                Questions = model.Questions.Select(Parse).ToList()
             };
         }
 
@@ -51,20 +62,67 @@ namespace savvy.Web.Models.Factories
             return model;
         }
 
-        public EditFillInQuestionModel Create(FillInQuestion question)
+        public Question Parse(EditQuestionModel model)
+        {
+            Question question;
+
+            switch (model.Type)
+            {
+                case QuestionType.FillIn:
+                    question = Parse((EditFillInQuestionModel) model);
+                    break;
+                case QuestionType.MultipleChoice:
+                    question = Parse((EditMultipleChoiceQuestionModel) model);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            question.QuestionId = model.QuestionId;
+            question.SequenceNum = model.SequenceNum;
+            question.QuestionHtml = model.QuestionHtml;
+            question.SupplementalInfoHtml = model.SupplementalInfoHtml;
+
+            return question;
+        }
+
+        private EditFillInQuestionModel Create(FillInQuestion question)
         {
             return new EditFillInQuestionModel
             {
+                Type = QuestionType.FillIn,
                 Answer = question.Answer
             };
         }
 
-        public EditMultipleChoiceQuestionModel Create(MultipleChoiceQuestion question)
+        private FillInQuestion Parse(EditFillInQuestionModel model)
+        {
+            return new FillInQuestion
+            {
+                Answer = model.Answer
+            };
+        }
+
+        private EditMultipleChoiceQuestionModel Create(MultipleChoiceQuestion question)
         {
             return new EditMultipleChoiceQuestionModel
             {
+                Type = QuestionType.MultipleChoice,
                 Choices = question.Choices.Select(ModelFactory.Create).ToList(),
                 CorrectAnswerIndex = question.CorrectAnswerIndex
+            };
+        }
+
+        private MultipleChoiceQuestion Parse(EditMultipleChoiceQuestionModel model)
+        {
+            return new MultipleChoiceQuestion
+            {
+                Choices = model.Choices.Select(c => new Choice
+                {
+                    ChoiceId = c.ChoiceId,
+                    ChoiceText = c.ChoiceText
+                }).ToList(),
+                CorrectAnswerIndex = model.CorrectAnswerIndex
             };
         }
     }

@@ -22,6 +22,8 @@ namespace savvy.Data
 
         #region Questions
 
+        bool CreateQuestion(Question question);
+
         Question GetQuestion(int questionId);
 
         Question GetQuestion(int quizId, int sequenceNum);

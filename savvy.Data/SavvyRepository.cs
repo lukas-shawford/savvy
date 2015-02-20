@@ -81,6 +81,12 @@ namespace savvy.Data
             return quiz;
         }
 
+        public bool CreateQuestion(Question question)
+        {
+            _ctx.Questions.Add(question);
+            return _ctx.SaveChanges() > 0;
+        }
+
         public Question GetQuestion(int questionId)
         {
             var question = _ctx.Questions.FirstOrDefault(q => q.QuestionId == questionId);

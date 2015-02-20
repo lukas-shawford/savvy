@@ -9,6 +9,7 @@ using Ninject.Web.Common.OwinHost;
 using Ninject.Web.WebApi.OwinHost;
 using Owin;
 using savvy.Data;
+using savvy.Web.Models.Converters;
 
 [assembly: OwinStartup(typeof(savvy.Web.Startup))]
 namespace savvy.Web
@@ -59,6 +60,9 @@ namespace savvy.Web
             // Serialize enums as strings instead of using numeric values
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new StringEnumConverter());
 
+            // Register converters
+            RegisterConverters(config);
+
             app.UseNinjectMiddleware(CreateKernel);
             app.UseNinjectWebApi(config);
 
@@ -77,6 +81,11 @@ namespace savvy.Web
         {
             kernel.Bind<ISavvyRepository>().To<SavvyRepository>().InRequestScope();
             kernel.Bind<SavvyContext>().To<SavvyContext>().InRequestScope();
+        }
+
+        private void RegisterConverters(HttpConfiguration config)
+        {
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new QuestionConverter());
         }
     }
 }
