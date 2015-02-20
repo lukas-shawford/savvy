@@ -2,7 +2,7 @@
 using System.Web.Http;
 using JsonPatch.Formatting;
 using Microsoft.Owin;
-using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Converters;
 using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.Common.OwinHost;
@@ -57,6 +57,9 @@ namespace savvy.Web
             // Temporarily disabling as this doesn't work with JsonPatch:
             // https://github.com/myquay/JsonPatch/issues/10
             //config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+            // Serialize enums as strings instead of using numeric values
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new StringEnumConverter());
 
             app.UseNinjectMiddleware(CreateKernel);
             app.UseNinjectWebApi(config);
