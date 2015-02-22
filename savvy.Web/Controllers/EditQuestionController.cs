@@ -54,6 +54,7 @@ namespace savvy.Web.Controllers
             var question = ModelFactory.Edit.Parse(questionModel);
             
             question.QuizId = quiz.QuizId;
+            question.SequenceNum = quiz.Questions.Max(q => q.SequenceNum) + 1;
 
             if (Repository.CreateQuestion(question))
             {

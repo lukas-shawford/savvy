@@ -55,7 +55,6 @@ namespace savvy.Web.Models.Factories
             }
 
             model.QuestionId = question.QuestionId;
-            model.SequenceNum = question.SequenceNum;
             model.QuestionHtml = question.QuestionHtml;
             model.SupplementalInfoHtml = question.SupplementalInfoHtml;
 
@@ -79,7 +78,6 @@ namespace savvy.Web.Models.Factories
             }
 
             question.QuestionId = model.QuestionId;
-            question.SequenceNum = model.SequenceNum;
             question.QuestionHtml = model.QuestionHtml;
             question.SupplementalInfoHtml = model.SupplementalInfoHtml;
 
