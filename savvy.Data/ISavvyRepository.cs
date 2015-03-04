@@ -6,6 +6,12 @@ namespace savvy.Data
 {
     public interface ISavvyRepository
     {
+        #region General
+
+        void SaveChanges();
+
+        #endregion
+
         #region Quizzes
 
         List<Quiz> GetAllQuizzes();

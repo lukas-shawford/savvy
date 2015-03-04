@@ -121,6 +121,11 @@ namespace savvy.Data
             return _ctx.SaveChanges() > 0;
         }
 
+        public void SaveChanges()
+        {
+            _ctx.SaveChanges();
+        }
+
         public bool UpdateQuiz(Quiz quiz)
         {
             _ctx.Quizzes.AttachAsModified(quiz, _ctx);
