@@ -67,9 +67,9 @@ namespace savvy.Web.Models.Factories
             switch (model.Type)
             {
                 case QuestionType.FillIn:
-                    return Parse((EditFillInQuestionModel) model, new FillInQuestion());
+                    return Parse(model, new FillInQuestion());
                 case QuestionType.MultipleChoice:
-                    return Parse((EditMultipleChoiceQuestionModel) model, new MultipleChoiceQuestion());
+                    return Parse(model, new MultipleChoiceQuestion());
                 default:
                     throw new ArgumentOutOfRangeException();
             }
