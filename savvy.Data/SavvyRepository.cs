@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using savvy.Data.Entities;
 using savvy.Data.Entities.Questions;
 using savvy.Data.Extensions;
+using savvy.Data.Util;
 
 namespace savvy.Data
 {
@@ -158,8 +160,50 @@ namespace savvy.Data
 
         public bool UpdateQuestion(Question question)
         {
-            _ctx.Questions.AttachAsModified(question, _ctx);
+            var originalQuestion = _ctx.Questions.Local.FirstOrDefault(q => q.QuestionId == question.QuestionId);
+            if (originalQuestion != null && originalQuestion.GetType() != question.GetType())
+            {
+                SwapQuestionType(originalQuestion, question);
+            }
+            else
+            {
+                _ctx.Questions.AttachAsModified(question, _ctx);
+            }
+
             return _ctx.SaveChanges() > 0;
+        }
+
+        private void SwapQuestionType(Question oldQuestion, Question newQuestion)
+        {
+            // Remove old question from appropriate subclass table
+            TypeSwitch.On(oldQuestion)
+                .Case((FillInQuestion q) =>
+                {
+                    _ctx.FillInQuestions.Remove(q);
+                })
+                .Case((MultipleChoiceQuestion q) =>
+                {
+                    _ctx.MultipleChoiceQuestions.Remove(q);
+                })
+                .Default(q =>
+                {
+                    throw new InvalidOperationException("Unsupported question type: " + q.GetType());
+                });
+
+            // Add new question in appropriate subclass table
+            TypeSwitch.On(newQuestion)
+                .Case((FillInQuestion q) =>
+                {
+                    _ctx.FillInQuestions.Add(q);
+                })
+                .Case((MultipleChoiceQuestion q) =>
+                {
+                    _ctx.MultipleChoiceQuestions.Add(q);
+                })
+                .Default(q =>
+                {
+                    throw new InvalidOperationException("Unsupported question type: " + q.GetType());
+                });
         }
 
         #endregion

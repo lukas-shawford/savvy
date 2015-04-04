@@ -63,5 +63,49 @@ namespace savvy.Web.Controllers
 
             return InternalServerError();
         }
+
+        public IHttpActionResult Put(int quizId, int sequenceNum, EditQuestionModel questionModel)
+        {
+            // Validate
+
+            if (questionModel == null)
+            {
+                return BadRequest("Question is missing.");
+            }
+
+            var quiz = Repository.GetQuiz(quizId);
+
+            if (quiz == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Invalid quiz."));
+            }
+
+            var index = sequenceNum - 1;
+            if (index < 0 || index >= quiz.Questions.Count)
+            {
+                return BadRequest("Question number out of range.");
+            }
+
+            // Get the old question
+            var question = quiz.Questions[index];
+
+            // Don't allow changing the QuestionID
+            questionModel.QuestionId = question.QuestionId;
+
+            // Update the old question with the new values
+            question = ModelFactory.Edit.Parse(questionModel, question);
+
+            // Don't allow changing the QuizID or the sequence number
+            question.QuizId = quiz.QuizId;
+            question.SequenceNum = sequenceNum;
+
+            // Save changes
+            if (Repository.UpdateQuestion(question))
+            {
+                return Ok(ModelFactory.Edit.Create(question));
+            }
+
+            return InternalServerError();
+        }
     }
 }
