@@ -28,5 +28,24 @@ namespace savvy.Web.Controllers
 
             return Ok(ModelFactory.Edit.Create(quiz));
         }
+
+        public IHttpActionResult Post(EditQuizModel quizModel)
+        {
+            if (quizModel == null)
+            {
+                return BadRequest("Quiz is missing or could not be parsed.");
+            }
+
+            var quiz = ModelFactory.Edit.Parse(quizModel);
+
+            quiz.QuizId = 0;
+
+            if (Repository.CreateQuiz(quiz))
+            {
+                return Ok(ModelFactory.Edit.Create(quiz));
+            }
+
+            return InternalServerError();
+        }
     }
 }

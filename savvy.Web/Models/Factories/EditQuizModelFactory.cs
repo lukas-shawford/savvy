@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using savvy.Data.Entities;
 using savvy.Data.Entities.Questions;
@@ -28,13 +29,21 @@ namespace savvy.Web.Models.Factories
 
         public Quiz Parse(EditQuizModel model)
         {
-            return new Quiz
+            var quiz = new Quiz
             {
                 QuizId = model.QuizId,
                 Name = model.Name,
                 Description = model.Description,
-                Questions = model.Questions.Select(Parse).ToList()
+                Questions = (model.Questions ?? new List<EditQuestionModel>()).Select(Parse).ToList()
             };
+
+            // Set sequence numbers for each question
+            for (int i = 0; i < quiz.Questions.Count; i++)
+            {
+                quiz.Questions[i].SequenceNum = i + 1;
+            }
+
+            return quiz;
         }
 
         public EditQuestionModel Create(Question question)
