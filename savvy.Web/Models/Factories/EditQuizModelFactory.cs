@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using savvy.Data.Entities;
 using savvy.Data.Entities.Questions;
@@ -64,26 +63,15 @@ namespace savvy.Web.Models.Factories
 
         public Question Parse(EditQuestionModel model)
         {
-            switch (model.Type)
-            {
-                case QuestionType.FillIn:
-                    return Parse(model, new FillInQuestion());
-                case QuestionType.MultipleChoice:
-                    return Parse(model, new MultipleChoiceQuestion());
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
+            Question question;
 
-        public Question Parse(EditQuestionModel model, Question question)
-        {
             switch (model.Type)
             {
                 case QuestionType.FillIn:
-                    question = Parse((EditFillInQuestionModel) model, question as FillInQuestion ?? new FillInQuestion());
+                    question = Parse((EditFillInQuestionModel) model);
                     break;
                 case QuestionType.MultipleChoice:
-                    question = Parse((EditMultipleChoiceQuestionModel) model, question as MultipleChoiceQuestion ?? new MultipleChoiceQuestion());
+                    question = Parse((EditMultipleChoiceQuestionModel) model);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -107,14 +95,10 @@ namespace savvy.Web.Models.Factories
 
         private FillInQuestion Parse(EditFillInQuestionModel model)
         {
-            return Parse(model, new FillInQuestion());
-        }
-
-        private FillInQuestion Parse(EditFillInQuestionModel model, FillInQuestion question)
-        {
-            question.Answer = model.Answer;
-
-            return question;
+            return new FillInQuestion
+            {
+                Answer = model.Answer
+            };
         }
 
         private EditMultipleChoiceQuestionModel Create(MultipleChoiceQuestion question)
@@ -129,44 +113,15 @@ namespace savvy.Web.Models.Factories
 
         private MultipleChoiceQuestion Parse(EditMultipleChoiceQuestionModel model)
         {
-            return Parse(model, new MultipleChoiceQuestion());
-        }
-
-        private MultipleChoiceQuestion Parse(EditMultipleChoiceQuestionModel model, MultipleChoiceQuestion question)
-        {
-            UpdateChoices(model, question);
-            question.CorrectAnswerIndex = model.CorrectAnswerIndex;
-
-            return question;
-        }
-
-        private void UpdateChoices(EditMultipleChoiceQuestionModel model, MultipleChoiceQuestion question)
-        {
-            if (question.Choices == null)
+            return new MultipleChoiceQuestion
             {
-                question.Choices = new List<Choice>();
-            }
-
-            for (int i = 0; i < model.Choices.Count; i++)
-            {
-                var choice = (i >= question.Choices.Count) ? new Choice() : question.Choices[i];
-
-                choice = ModelFactory.Parse(model.Choices[i], model.QuestionId, choice);
-
-                if (i >= question.Choices.Count)
+                Choices = model.Choices.Select(c => new Choice
                 {
-                    question.Choices.Add(choice);
-                }
-                else
-                {
-                    question.Choices[i] = choice;
-                }
-            }
-
-            if (question.Choices.Count > model.Choices.Count)
-            {
-                question.Choices.RemoveRange(model.Choices.Count, question.Choices.Count - model.Choices.Count);
-            }
+                    ChoiceId = c.ChoiceId,
+                    ChoiceText = c.ChoiceText
+                }).ToList(),
+                CorrectAnswerIndex = model.CorrectAnswerIndex
+            };
         }
     }
 }

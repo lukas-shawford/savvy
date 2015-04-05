@@ -22,19 +22,5 @@ namespace savvy.Web.Models.Factories
                 ChoiceText = choice.ChoiceText
             };
         }
-
-        public Choice Parse(ChoiceModel model, int questionId)
-        {
-            return Parse(model, questionId, new Choice());
-        }
-
-        public Choice Parse(ChoiceModel model, int questionId, Choice choice)
-        {
-            choice.QuestionId = questionId;
-            choice.ChoiceId = model.ChoiceId;
-            choice.ChoiceText = model.ChoiceText;
-
-            return choice;
-        }
     }
 }
