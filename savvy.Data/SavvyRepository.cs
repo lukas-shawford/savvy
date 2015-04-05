@@ -45,7 +45,9 @@ namespace savvy.Data
 
         public Quiz GetQuiz(int quizId)
         {
-            var quiz = _ctx.Quizzes.Include(q => q.Questions).FirstOrDefault(q => q.QuizId == quizId);
+            var quiz = _ctx.Quizzes
+                .Include(q => q.Questions)
+                .FirstOrDefault(q => q.QuizId == quizId && q.Deleted == false);
 
             if (quiz == null)
             {
@@ -64,7 +66,10 @@ namespace savvy.Data
 
         public List<Quiz> GetAllQuizzes()
         {
-            List<Quiz> quizzes = _ctx.Quizzes.Include(quiz => quiz.Questions).ToList();
+            List<Quiz> quizzes = _ctx.Quizzes
+                .Include(quiz => quiz.Questions)
+                .Where(q => q.Deleted == false)
+                .ToList();
 
             foreach (var quiz in quizzes)
             {
@@ -91,10 +96,19 @@ namespace savvy.Data
             return _ctx.SaveChanges() > 0;
         }
 
-        public bool DeleteQuiz(int quizId)
+        public bool DeleteQuiz(int quizId, bool permanent = false)
         {
             var quiz = _ctx.Quizzes.First(q => q.QuizId == quizId);
-            _ctx.Quizzes.Remove(quiz);
+
+            if (permanent)
+            {
+                _ctx.Quizzes.Remove(quiz);
+            }
+            else
+            {
+                quiz.Deleted = true;
+            }
+
             return _ctx.SaveChanges() > 0;
         }
 

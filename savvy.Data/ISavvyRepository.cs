@@ -22,7 +22,7 @@ namespace savvy.Data
 
         bool UpdateQuiz(Quiz quiz);
 
-        bool DeleteQuiz(int quizId);
+        bool DeleteQuiz(int quizId, bool permanent = false);
 
         #endregion
 

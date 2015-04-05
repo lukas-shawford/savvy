@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using savvy.Data;
 using savvy.Web.Models;
@@ -43,6 +45,23 @@ namespace savvy.Web.Controllers
             if (Repository.CreateQuiz(quiz))
             {
                 return Ok(ModelFactory.Edit.Create(quiz));
+            }
+
+            return InternalServerError();
+        }
+
+        public IHttpActionResult Delete(int id)
+        {
+            var quiz = Repository.GetQuiz(id);
+
+            if (quiz == null)
+            {
+                return NotFound();
+            }
+
+            if (Repository.DeleteQuiz(id))
+            {
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.NoContent));
             }
 
             return InternalServerError();
