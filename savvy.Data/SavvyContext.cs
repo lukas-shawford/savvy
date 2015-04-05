@@ -20,9 +20,21 @@ namespace savvy.Data
 
         static SavvyContext()
         {
-            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<SavvyContext, MigrationConfiguration>());
+            // Set database initializer - uncomment one of the initializers below.
 
+            // SavvyDBInitializer: Currently, this will drop and recreate the database, and also seed it with sample data.
+            // This is a bit slow, so if you know the data model has not changed, you can comment this out and uncomment
+            // the next one instead (the one with the null initializer).
             Database.SetInitializer(new SavvyDBInitializer());
+
+            // Null initializer (does nothing). If the data model hasn't changed, use this one (quicker for development).
+            //Database.SetInitializer<SavvyContext>(null);
+
+            // Migrate to latest version. Once the data model / API have stabilized a bit and we have actual data that
+            // we need to worry about preserving, this is going to become the preferred scheme to use. This will
+            // require writing migration scripts every time we want to make a change to the data model. Read up on
+            // Code First Migrations when we're ready to switch over to this scheme.
+            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<SavvyContext, MigrationConfiguration>());
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
