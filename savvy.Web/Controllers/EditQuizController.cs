@@ -50,6 +50,33 @@ namespace savvy.Web.Controllers
             return InternalServerError();
         }
 
+        public IHttpActionResult Put(int id, EditQuizModel quizModel)
+        {
+            if (quizModel == null)
+            {
+                return BadRequest("Quiz is missing or could not be parsed.");
+            }
+
+            var quiz = Repository.GetQuiz(id);
+
+            if (quiz == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Invalid quiz."));
+            }
+
+            // Update quiz properties
+            // TODO: This PUT handler behaves more like PATCH than PUT, but that's ok for now (when proper PATCH support is added to the API, this should be revisited.)
+            quiz.Name = quizModel.Name;
+            quiz.Description = quizModel.Description;
+
+            if (Repository.UpdateQuiz(quiz))
+            {
+                return Ok(ModelFactory.Edit.Create(quiz));
+            }
+
+            return InternalServerError();
+        }
+
         public IHttpActionResult Delete(int id)
         {
             var quiz = Repository.GetQuiz(id);
