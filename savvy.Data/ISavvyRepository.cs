@@ -34,7 +34,7 @@ namespace savvy.Data
 
         Question GetQuestion(int quizId, int sequenceNum);
 
-        bool UpdateQuestion(Question question);
+        bool DeleteQuestion(int questionId);
 
         #endregion
     }

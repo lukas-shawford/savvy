@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using savvy.Data;
+using savvy.Data.Entities;
 using savvy.Web.Models.Questions;
 
 namespace savvy.Web.Controllers
@@ -66,46 +67,67 @@ namespace savvy.Web.Controllers
 
         public IHttpActionResult Put(int quizId, int sequenceNum, EditQuestionModel questionModel)
         {
+            Quiz quiz;
+            IHttpActionResult responseMessage;
+
             // Validate
+            if (!ValidateQuestion(quizId, sequenceNum, questionModel, out quiz, out responseMessage))
+            {
+                return responseMessage;
+            }
+
+            // Get the old question and delete it
+            int index = sequenceNum - 1;
+            var oldQuestion = quiz.Questions[index];
+            if (!Repository.DeleteQuestion(oldQuestion.QuestionId))
+            {
+                return InternalServerError();
+            }
+
+            // Parse the new question
+            var question = ModelFactory.Edit.Parse(questionModel);
+
+            // Disallow changing certain fields
+            question.QuestionId = 0;
+            question.QuizId = quizId;
+            question.SequenceNum = sequenceNum;
+
+            // Add the new question
+            if (Repository.CreateQuestion(question))
+            {
+                return Ok(ModelFactory.Edit.Create(question));
+            }
+            
+            return InternalServerError();
+        }
+
+        private bool ValidateQuestion(int quizId, int sequenceNum, EditQuestionModel questionModel, out Quiz quiz, out IHttpActionResult response)
+        {
+            quiz = null;
+            response = null;
 
             if (questionModel == null)
             {
-                return BadRequest("Question is missing.");
+                response = BadRequest("Question is missing.");
+                return false;
             }
 
-            var quiz = Repository.GetQuiz(quizId);
+            quiz = Repository.GetQuiz(quizId);
 
             if (quiz == null)
             {
-                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Invalid quiz."));
+                response = ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Invalid quiz."));
+                return false;
             }
 
             var index = sequenceNum - 1;
             if (index < 0 || index >= quiz.Questions.Count)
             {
-                return BadRequest("Question number out of range.");
+                response = NotFound();
+                return false;
             }
 
-            // Get the old question
-            var question = quiz.Questions[index];
-
-            // Don't allow changing the QuestionID
-            questionModel.QuestionId = question.QuestionId;
-
-            // Update the old question with the new values
-            question = ModelFactory.Edit.Parse(questionModel, question);
-
-            // Don't allow changing the QuizID or the sequence number
-            question.QuizId = quiz.QuizId;
-            question.SequenceNum = sequenceNum;
-
-            // Save changes
-            if (Repository.UpdateQuestion(question))
-            {
-                return Ok(ModelFactory.Edit.Create(question));
-            }
-
-            return InternalServerError();
+            return true;
         }
     }
 }

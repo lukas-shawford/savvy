@@ -158,52 +158,11 @@ namespace savvy.Data
             return _ctx.SaveChanges() > 0;
         }
 
-        public bool UpdateQuestion(Question question)
+        public bool DeleteQuestion(int questionId)
         {
-            var originalQuestion = _ctx.Questions.Local.FirstOrDefault(q => q.QuestionId == question.QuestionId);
-            if (originalQuestion != null && originalQuestion.GetType() != question.GetType())
-            {
-                SwapQuestionType(originalQuestion, question);
-            }
-            else
-            {
-                _ctx.Questions.AttachAsModified(question, _ctx);
-            }
-
+            var question = _ctx.Questions.First(q => q.QuestionId == questionId);
+            _ctx.Questions.Remove(question);
             return _ctx.SaveChanges() > 0;
-        }
-
-        private void SwapQuestionType(Question oldQuestion, Question newQuestion)
-        {
-            // Remove old question from appropriate subclass table
-            TypeSwitch.On(oldQuestion)
-                .Case((FillInQuestion q) =>
-                {
-                    _ctx.FillInQuestions.Remove(q);
-                })
-                .Case((MultipleChoiceQuestion q) =>
-                {
-                    _ctx.MultipleChoiceQuestions.Remove(q);
-                })
-                .Default(q =>
-                {
-                    throw new InvalidOperationException("Unsupported question type: " + q.GetType());
-                });
-
-            // Add new question in appropriate subclass table
-            TypeSwitch.On(newQuestion)
-                .Case((FillInQuestion q) =>
-                {
-                    _ctx.FillInQuestions.Add(q);
-                })
-                .Case((MultipleChoiceQuestion q) =>
-                {
-                    _ctx.MultipleChoiceQuestions.Add(q);
-                })
-                .Default(q =>
-                {
-                    throw new InvalidOperationException("Unsupported question type: " + q.GetType());
-                });
         }
 
         #endregion
