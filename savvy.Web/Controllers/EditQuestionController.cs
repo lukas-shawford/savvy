@@ -101,6 +101,29 @@ namespace savvy.Web.Controllers
             return InternalServerError();
         }
 
+        public IHttpActionResult Delete(int quizId, int sequenceNum)
+        {
+            var quiz = Repository.GetQuiz(quizId);
+
+            if (quiz == null)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Invalid quiz."));
+            }
+
+            var index = sequenceNum - 1;
+            if (index < 0 || index >= quiz.Questions.Count)
+            {
+                return NotFound();
+            }
+
+            if (Repository.DeleteQuestion(quiz.Questions[index].QuestionId))
+            {
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.NoContent));
+            }
+
+            return InternalServerError();
+        }
+
         private bool ValidateQuestion(int quizId, int sequenceNum, EditQuestionModel questionModel, out Quiz quiz, out IHttpActionResult response)
         {
             quiz = null;
